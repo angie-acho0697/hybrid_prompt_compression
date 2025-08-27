@@ -60,6 +60,124 @@ cd TokenSkip
 pip install -r requirements.txt
 ```
 
+## Model Download
+
+We provide an automated script to download all required models and weights for the TokenSkip project.
+
+### Prerequisites
+
+1. Install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Ensure you have sufficient disk space (recommended: 50+ GB)
+
+### Quick Start
+
+Download all models (Qwen base model, LLMLingua-2, and TokenSkip adapters):
+
+```bash
+python download_models.py
+```
+
+This will download:
+- Qwen2.5-7B-Instruct base model (~14 GB)
+- LLMLingua-2 model weights (~1.5 GB)
+- TokenSkip adapters for 3B, 7B, and 14B models (~1-2 GB each)
+
+### Advanced Usage
+
+#### Download specific components only:
+
+```bash
+# Download only Qwen base model
+python download_models.py --qwen-only
+
+# Download only LLMLingua-2 model
+python download_models.py --llmlingua-only
+
+# Download only TokenSkip adapters
+python download_models.py --adapters-only
+```
+
+#### Choose different model size:
+
+```bash
+# Download 3B model instead of 7B
+python download_models.py --model-size 3b
+
+# Download 14B model
+python download_models.py --model-size 14b
+
+# Download any other size (e.g., 1.5b, 4b, 6b, 8b, 9b, 12b, 32b, etc.)
+python download_models.py --model-size 1.5b
+```
+
+#### Custom download directory:
+
+```bash
+# Download to custom directory
+python download_models.py --base-dir /path/to/your/models
+```
+
+#### Skip disk space check:
+
+```bash
+python download_models.py --skip-disk-check
+```
+
+### Model Details
+
+#### 1. Qwen Base Models
+- **Qwen2.5-3B-Instruct**: ~6 GB
+- **Qwen2.5-7B-Instruct**: ~14 GB
+- **Qwen2.5-14B-Instruct**: ~28 GB
+
+#### 2. LLMLingua-2 Model
+- **llmlingua-2-xlm-roberta-large-meetingbank**: ~1.5 GB
+- Used for compressing Chain-of-Thought outputs
+
+#### 3. TokenSkip Adapters
+- **TokenSkip-Qwen2.5-3B-Instruct-GSM8K**: ~1 GB
+- **TokenSkip-Qwen2.5-7B-Instruct-GSM8K**: ~1 GB
+- **TokenSkip-Qwen2.5-14B-Instruct-GSM8K**: ~1 GB
+
+> **Note**: TokenSkip adapters are currently available for 3B, 7B, and 14B models only. For other model sizes, you can train your own adapter using the provided training pipeline.
+
+### After Download
+
+Once the download is complete, update your configuration files:
+
+#### 1. Update `eval.sh`:
+```bash
+MODEL_PATH="/path/to/models/Qwen2.5-7B-Instruct"
+ADAPTER_PATH="/path/to/models/TokenSkip-Qwen2.5-7B-Instruct-GSM8K"
+```
+
+#### 2. Update `LLMLingua.py`:
+```python
+llmlingua_path="/path/to/models/llmlingua-2-xlm-roberta-large-meetingbank"
+```
+
+### Troubleshooting
+
+#### Common Issues:
+
+1. **Out of disk space**: Use `--skip-disk-check` or free up space
+2. **Network timeout**: The script will retry automatically
+3. **Permission errors**: Ensure write permissions to the download directory
+
+#### Manual Download:
+
+If the script fails, you can manually download models from Hugging Face:
+
+- Qwen models: https://huggingface.co/Qwen
+- LLMLingua-2: https://huggingface.co/microsoft/llmlingua-2-xlm-roberta-large-meetingbank
+- TokenSkip adapters: https://huggingface.co/hemingkx
+
+For more detailed troubleshooting, see the [Q&A section](./assets/Q&A.md).
+
 ## Token Pruning
 
 **1.Obtain the original CoT outputs of the training data, using the target LLM**
@@ -138,11 +256,11 @@ We warmly welcome contributions and discussions related to TokenSkip! If you hav
 
 ## Acknowledgments
 
-This codebase is built from [DeepSeek-Math](https://github.com/deepseek-ai/DeepSeek-Math) and [LLMLingua](https://github.com/microsoft/LLMLingua).
+This codebase is built from [DeepSeek-Math](https://github.com/deepseek-ai/DeepSeek-Math), [LLMLingua](https://github.com/microsoft/LLMLingua) and [TokenSkip](https://github.com/hemingkx/TokenSkip).
 
 ## Citation
 
-If you find the resources in this repository useful, please cite our paper:
+If you find the resources in this repository useful, please cite the tokenskip paper:
 
 ```
 @misc{xia2025tokenskip,
