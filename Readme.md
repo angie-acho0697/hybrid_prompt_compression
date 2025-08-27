@@ -1,10 +1,8 @@
 <div align="center">
-<h1><img src="assets/logo.png" height="32px"/> TokenSkip: Controllable Chain-of-Thought Compression in LLMs</h1> 
+<h1>TokenSkip: Controllable Chain-of-Thought Compression in LLMs</h1> 
 </div>
 
 <p align="center">
-<a href="https://arxiv.org/abs/2502.12067">
-  <img src="https://img.shields.io/badge/Arxiv-2502.12067-orange.svg"></a> 
 <a href="https://opensource.org/licenses/Apache-2.0">
   <img src="https://img.shields.io/badge/License-Apache_2.0-green.svg"></a> 
 <a href="https://github.com/hemingkx/TokenSkip/pulls">
@@ -13,33 +11,24 @@
 
 ## Introduction
 
-*Does every token in the CoT output contribute equally to deriving the answer?* —— We say **NO**!
+## Overall System Flow Design:
+The proposed sequence follows 
+- Step 1: Input + NER-Enhanced TokenSkip (CoT)
+- Step 2: Soft Prompt Compression → Model Inference → Output 
 
-We introduce ***TokenSkip***, a simple yet effective approach that enables LLMs to selectively skip redundant tokens during Chain-of-Thought generation and learn shortcuts between critical reasoning tokens, thereby allowing for controllable CoT compression with adjustable ratios.
+Which establishes a two-stage compression pipeline that processes generated CoT reasoning before final model inference.
 
-TokenSkip constructs compressed CoT training data with various compression ratios, by pruning unimportant tokens from original CoT trajectories. Then, it conducts a general supervised fine-tuning process on target LLMs with this training data, enabling LLMs to automatically trim redundant tokens during reasoning.
+### Stage 1: CoT-Specific NER-Enhanced TokenSkip:
+- Algorithm Design: Extended tokenization with reasoning delimiter awareness, custom NER entities for mathematical expressions and logical connectors, and CoT-optimized importance scoring. Implement a hybrid approach combining Hugging Face transformers tokenization, Spacy+RoBERTA NER, and LLMLingua importance scoring
+Reasoning Structure Preservation: Special boosting for logical connectors ("therefore", "because", "since"), numerical calculations, intermediate results, and causal relationships
+- Compression Strategy: Higher retention ratio than input compression (potentially 60% vs 50%) to preserve reasoning integrity
+Output: Hard-compressed CoT reasoning maintaining logical flow and factual accuracy
 
-![tokenskip](./assets/tokenskip.png)
+### Stage 2: Soft Prompt Compression Methodology:
+Paper here: https://arxiv.org/pdf/2504.07109
 
-**This method is distinguished by its low training cost.** For Qwen2.5-14B-Instruct, TokenSkip fine-tunes only **0.2%** of the model's parameters using LoRA. The size of the compressed CoT training data is no larger than that of the original training set, with 7,473 examples in GSM8K and 7,500 in MATH. The training is completed in approximately **2.5 hours** for the 14B model on two 3090 GPUs. These characteristics make TokenSkip an *efficient* and *reproducible* approach, suitable for use in efficient and cost-effective LLM deployment.
+## Model Selection: Use frozen Qwen2.5-3B, Qwen2.5-7B-Instruct-Instruct and Gemma with trainable LoRA parameters for encoder consistency
 
-We observe that as the model scale increases, there is less performance degradation at higher compression ratios, indicating that larger LLMs are better at identifying shortcuts between critical reasoning tokens, enabling more efficient CoT generation. Notably, Qwen2.5-14B-Instruct exhibits almost **NO** performance drop (less than 0.4%) with **40%** token trimming. Even at a compression ratio of 0.5, the model maintains strong reasoning capabilities, with only 2% performance degradation. 
-
-<img src="./assets/results.png" alt="results"  />
-
-## Update
-
-**2025.2.22**: We have released the code for CoT compression and the instructions for SFT🔥!
-
-**2025.2.17**: We have released the evaluation scripts and checkpoints for TokenSkip. Check it out!
-
-## Todo
-
-- [x] Release checkpoints for Qwen2.5-Instruct series
-- [x] Release evaluation code on GSM8K and MATH-500
-- [x] Release code for compressed CoT data construction
-- [x] Add instructions for SFT (LoRA) on LLaMA-Factory
-- [ ] Investigations on TokenSkip with larger model scales
 
 ## Model Weights
 
