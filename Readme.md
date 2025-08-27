@@ -1,5 +1,5 @@
 <div align="center">
-<h1>TokenSkip: Controllable Chain-of-Thought Compression in LLMs</h1> 
+<h1>Hybrid Prompt Compression with Granularity Control</h1> 
 </div>
 
 <p align="center">
@@ -10,7 +10,7 @@
 </p>
 
 ## Introduction
-
+TBD
 ## Overall System Flow Design:
 The proposed sequence follows 
 - Step 1: Input + NER-Enhanced TokenSkip (CoT)
