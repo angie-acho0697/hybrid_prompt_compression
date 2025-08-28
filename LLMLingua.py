@@ -60,7 +60,7 @@ def filter_formatted_outputs(input_path="outputs/Qwen2.5-7B-Instruct/gsm8k/7b/Or
     save_jsonl(formatted_data, output_path)
 
 def LLMLingua(data, compression_ratio=0.5, model_type="qwen",
-              llmlingua_path="/your_model_path/llmlingua-2-xlm-roberta-large-meetingbank"):
+              llmlingua_path="/models/llmlingua-2-xlm-roberta-large-meetingbank"):
     """
     Compress the CoT outputs with LLMLingua-2.
     """
@@ -103,7 +103,7 @@ def LLMLingua(data, compression_ratio=0.5, model_type="qwen",
 
 def compress_cot_outputs(input_path="outputs/Qwen2.5-7B-Instruct/gsm8k/7b/Original/samples/predictions_formatted.jsonl",
                          output_dir="outputs/Qwen2.5-7B-Instruct/gsm8k/7b/Compression", model_type="qwen",
-                         llmlingua_path="llmlingua-2-xlm-roberta-large-meetingbank"):
+                         llmlingua_path="models/llmlingua-2-xlm-roberta-large-meetingbank"):
     """
     Compress the CoT outputs with various compression ratios using LLMLingua-2.
     """
@@ -124,7 +124,7 @@ def get_average_compress_rate(data):
 
 
 def data_processing_gsm8k(input_dir="outputs/Qwen2.5-7B-Instruct/gsm8k/7b/", model_type="qwen",
-                          llmlingua_path="/your_model_path/llmlingua-2-xlm-roberta-large-meetingbank"):
+                          llmlingua_path="/models/llmlingua-2-xlm-roberta-large-meetingbank"):
     """
     The overall pipeline to process the GSM8K data.
     """

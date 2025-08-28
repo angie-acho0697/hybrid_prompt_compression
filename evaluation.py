@@ -93,13 +93,15 @@ def infer(args, test_data, answer_extraction_fn):
         )
         model = AutoModelForCausalLM.from_pretrained(
             args.model_path,
-            torch_dtype=torch.float16,
+            # torch_dtype=torch.float16,
+            torch_dtype=torch.float32,
             trust_remote_code=True,
-            device_map="auto",
+            # device_map="auto",
+            device_map="cpu"
         )
 
         if args.use_adapter:
-            model = PeftModel.from_pretrained(model, args.adapter_path, device_map="auto")
+            model = PeftModel.from_pretrained(model, args.adapter_path, device_map="cpu") #auto
             model = model.merge_and_unload()
 
         # set padding side to left for batch generation
@@ -115,7 +117,7 @@ def infer(args, test_data, answer_extraction_fn):
             
         do_sample = False if args.temperature == 0.0 else True
 
-        torch.cuda.synchronize()
+        # torch.cuda.synchronize()
         start_time = time()
         outputs, _ = generate_completions(
             model=model,
@@ -129,7 +131,7 @@ def infer(args, test_data, answer_extraction_fn):
             stop_id_sequences=stop_id_sequences if stop_id_sequences else None,
             end_of_generation_id_sequence=[tokenizer.eos_token_id] if tokenizer.eos_token_id is not None else None
         )
-        torch.cuda.synchronize()
+        # torch.cuda.synchronize()
         total_time = time() - start_time
 
     model_outputs = outputs
@@ -157,9 +159,9 @@ def infer(args, test_data, answer_extraction_fn):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=str, default="outputs/Qwen2.5-7B-Instruct/gsm8k/", help="default to `model_path`_predictions")
-    parser.add_argument("--model-path", type=str, default="/your_model_path/Qwen2.5-7B-Instruct")
-    parser.add_argument("--tokenizer-path", type=str, default="/your_model_path/Qwen2.5-7B-Instruct")
-    parser.add_argument("--adapter-path", type=str, default="/your_model_path/TokenSkip-Qwen2.5-7B-Instruct-GSM8K")
+    parser.add_argument("--model-path", type=str, default="/models/Qwen2.5-7B-Instruct")
+    parser.add_argument("--tokenizer-path", type=str, default="/models/Qwen2.5-7B-Instruct")
+    parser.add_argument("--adapter-path", type=str, default="/models/TokenSkip-Qwen2.5-7B-Instruct-GSM8K")
     parser.add_argument("--model-size", type=str, choices=['3b', '7b', '8b', '13b', '14b', '33b', '34b', '70b'], default="7b")
     parser.add_argument("--model-type", type=str, choices=['llama3', 'qwen'], default="qwen")
     parser.add_argument("--use_adapter", action='store_true', default=False, help="whether to use LoRA")
