@@ -1,0 +1,109 @@
+# Large model files and directories
+your_model_path/
+models/
+LLaMA-Factory/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.joblib
+*.pickle
+*.pkl
+*.npy
+*.npz
+*.onnx
+*.pb
+*.tflite
+*.wasm
+*.7z
+*.tar
+*.tar.gz
+*.tar.bz2
+*.zip
+*.rar
+*.xz
+*.zst
+*.gz
+*.bz2
+
+# Output directories
+outputs/
+results/
+logs/
+checkpoints/
+runs/
+wandb/
+
+# Cache directories
+.cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Environment files
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Large data files (exclude large datasets)
+datasets/gsm8k/train.jsonl
+datasets/gsm8k/test.jsonl
+datasets/math-500/train.jsonl
+datasets/math-500/test.jsonl
+
+# Large evaluation outputs
+eval/
+outputs/*.jsonl
+outputs/*.json
+results/*.jsonl
+results/*.json
+
+# Model downloads and temporary directories
+downloads/
+temp/
+tmp/
+
+# Large model directories
+your_model_path/
+models/
+checkpoints/
+saved_models/
+
+# LLaMA-Factory directory (users should clone it separately)
+LLaMA-Factory/
+
+# Large files by size (files larger than 100MB)
+# This is a fallback for any large files not caught by extensions
