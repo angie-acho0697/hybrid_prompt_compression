@@ -179,30 +179,30 @@ python ./evaluation.py --output-dir "outputs/Qwen2.5-7B-Instruct/gsm8k/" \
 
 Download the [model weights](https://huggingface.co/microsoft/llmlingua-2-xlm-roberta-large-meetingbank) for [LLMLingua-2](https://github.com/microsoft/LLMLingua) and modify the checkpoint path in `LLMLingua.py`.
 
-Run `LLMLingua` to obtain compressed CoTs with various compression ratios.
+Run `LLMLingua with NER` to obtain compressed CoTs with various compression ratios.
 
 ### Basic Usage
 
 ```bash
 # Use default 7B model
-python ./LLMLingua.py
+python ./llmlingua_ner.py
 
 # Use 3B model
-python ./LLMLingua.py --model-size 3b
+python ./llmlingua_ner.py --model-size 3b
 
 ```
 
 ### Advanced Usage
 
 ```bash
-# Use custom LLMLingua model path
-python ./LLMLingua.py --llmlingua-path "/path/to/llmlingua-2-xlm-roberta-large-meetingbank"
+# Use custom LLMLingua + NER model path
+python ./llmlingua_ner.py --llmlingua-path "/path/to/llmlingua-2-xlm-roberta-large-meetingbank"
 
 # Use Llama3 model type for output formatting
-python ./LLMLingua.py --model-size 7b --model-type llama3
+python ./llmlingua_ner.py --model-size 7b --model-type llama3
 
 # Combine multiple options
-python ./LLMLingua.py --model-size 14b --model-type qwen --llmlingua-path "/custom/path/to/llmlingua"
+python ./llmlingua_ner.py --model-size 14b --model-type qwen --llmlingua-path "/custom/path/to/llmlingua"
 ```
 
 ### Command-line Arguments
@@ -213,7 +213,7 @@ python ./LLMLingua.py --model-size 14b --model-type qwen --llmlingua-path "/cust
 
 The script automatically constructs file paths based on the model name and size, following the pattern: `outputs/{model_name}/gsm8k/{model_size}/...`
 
-> The compressed CoTs will be stored in `outputs/.../Compression`.
+> The compressed CoTs will be stored in `outputs/.../NER_Enhanced_Compression`.
 
 **3.Convert training data to LLaMA-Factory format**
 
