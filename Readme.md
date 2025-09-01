@@ -222,11 +222,14 @@ Run `get_llamafactory_input` to convert the training data into the format of [LL
 ### Basic Usage
 
 ```bash
-# Use default 7B model
+# Use default 7B model by loading tokenskip compressed data
 python ./get_llamafactory_input.py
 
-# Use 3B model
+# Use 3B model by loading tokenskip compressed data
 python ./get_llamafactory_input.py --model-size 3b
+
+# Use 3B model by loading tokenskip+NER compressed data
+python ./get_llamafactory_input.py --model-size 3b --use-ner-enhanced
 
 ```
 
@@ -247,7 +250,7 @@ python ./get_llamafactory_input.py --model-size 14b --output-file ./my_custom_da
 
 The script automatically constructs file paths based on the model name and size, following the pattern: `outputs/{model_name}/gsm8k/{model_size}/...`
 
-> The converted data will be stored in `outputs/mydataset_compressed_gsm8k_llmlingua2_qwen_{MODEL_SIZE}.json` (auto-generated filename).
+> The converted data will be stored in `outputs/mydataset_compressed_gsm8k_llmlingua2_qwen_{MODEL_SIZE}_ner_enhanced.json` (auto-generated filename).
 >
 > For reference, we provide our processed training data in `datasets/gsm8k/llamafactory_inputs/`.
 
