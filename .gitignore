@@ -85,7 +85,6 @@ datasets/math-500/train.jsonl
 datasets/math-500/test.jsonl
 
 # Large evaluation outputs
-eval/
 outputs/*.jsonl
 outputs/*.json
 results/*.jsonl
