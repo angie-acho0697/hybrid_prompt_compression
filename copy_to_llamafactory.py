@@ -19,7 +19,7 @@ def get_model_name(model_size):
     return f"Qwen2.5-{model_size.upper()}-Instruct"
 
 
-def copy_dataset_to_llamafactory(model_size="7b", llamafactory_dir=None, source_file=None, target_name=None):
+def copy_dataset_to_llamafactory(model_size="7b", llamafactory_dir=None, source_file=None, target_name=None, use_ner_enhanced=False):
     """
     Copy the dataset to LLaMA-Factory/data/ directory.
     
@@ -28,29 +28,34 @@ def copy_dataset_to_llamafactory(model_size="7b", llamafactory_dir=None, source_
         llamafactory_dir: Path to LLaMA-Factory directory (default: "../LLaMA-Factory")
         source_file: Source file path (auto-generated if None)
         target_name: Target filename in LLaMA-Factory/data/ (auto-generated if None)
+        use_ner_enhanced: Whether to use NER enhanced compression data
     """
     # Get model name
     model_name = get_model_name(model_size)
     
-    # Set default paths
+    # Set default paths based on compression type
     if source_file is None:
-        source_file = f"outputs/mydataset_compressed_gsm8k_llmlingua2_qwen_{model_size.upper()}.json"
+        compression_type = "ner_enhanced" if use_ner_enhanced else "tokenskip"
+        source_file = f"outputs/mydataset_compressed_gsm8k_llmlingua2_qwen_{model_size.upper()}_{compression_type}.json"
     
     if llamafactory_dir is None:
         llamafactory_dir = "./LLaMA-Factory"
     
     if target_name is None:
-        target_name = f"mydataset_compressed_gsm8k_llmlingua2_qwen_{model_size.upper()}.json"
+        compression_type = "ner_enhanced" if use_ner_enhanced else "tokenskip"
+        target_name = f"mydataset_compressed_gsm8k_llmlingua2_qwen_{model_size.upper()}_{compression_type}.json"
     
     # Convert to Path objects
     source_path = Path(source_file)
     llamafactory_data_dir = Path(llamafactory_dir) / "data"
     target_path = llamafactory_data_dir / target_name
     
+    compression_type = "NER Enhanced" if use_ner_enhanced else "Standard TokenSkip"
     print("🚀 TokenSkip Dataset Copier")
     print("=" * 50)
     print(f"Model: {model_name}")
     print(f"Model size: {model_size}")
+    print(f"Compression type: {compression_type}")
     print(f"Source file: {source_path.absolute()}")
     print(f"Target file: {target_path.absolute()}")
     
@@ -100,6 +105,8 @@ def main():
                        help="Source file path (auto-generated if not specified)")
     parser.add_argument("--target-name", type=str, default=None,
                        help="Target filename in LLaMA-Factory/data/ (auto-generated if not specified)")
+    parser.add_argument("--use-ner-enhanced", action="store_true",
+                       help="Use NER enhanced compression data instead of standard TokenSkip compression")
     
     args = parser.parse_args()
     
@@ -108,7 +115,8 @@ def main():
         model_size=args.model_size,
         llamafactory_dir=args.llamafactory_dir,
         source_file=args.source_file,
-        target_name=args.target_name
+        target_name=args.target_name,
+        use_ner_enhanced=args.use_ner_enhanced
     )
     
     if success:

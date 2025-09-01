@@ -265,8 +265,15 @@ TokenSkip follows the general LoRA SFT pipeline of [LLaMA-Factory](https://githu
 # Copy the dataset to LLaMA-Factory/data/
 python ./copy_to_llamafactory.py --model-size 3b
 
+# Copy NER enhanced dataset
+python copy_to_llamafactory.py --model-size 3b --use-ner-enhanced
+
+
 # Register the dataset in dataset_info.json
 python ./register_dataset.py --model-size 3b
+
+# Register NER enhanced dataset
+python register_dataset.py --model-size 3b --use-ner-enhanced
 ```
 3. To fine-tune the target LLM with LoRA, run the following command:
 
@@ -281,6 +288,9 @@ CUDA_VISIBLE_DEVICES=0 llamafactory-cli train configs/examples/train_lora/myllam
 ```cmd
 # For 3B model
 set CUDA_VISIBLE_DEVICES=0 && llamafactory-cli train configs/examples/train_lora/myllama3_lora_sft_compressed_gsm8k_llmlingua2_qwen_3B.yaml
+
+# For 3B model with NER enhanced dataset
+set CUDA_VISIBLE_DEVICES=0 && llamafactory-cli train configs/examples/train_lora/myllama3_lora_sft_compressed_gsm8k_llmlingua2_qwen_3B_ner_enhanced.yaml
 
 ```
 
