@@ -8,8 +8,8 @@ from tqdm import tqdm
 from time import time
 from copy import deepcopy
 from peft import PeftModel
-from vllm import LLM, SamplingParams
-from vllm.lora.request import LoRARequest
+# from vllm import LLM, SamplingParams
+# from vllm.lora.request import LoRARequest
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from eval.utils import generate_completions
@@ -158,10 +158,10 @@ def infer(args, test_data, answer_extraction_fn):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output-dir", type=str, default="outputs/Qwen2.5-7B-Instruct/gsm8k/", help="default to `model_path`_predictions")
-    parser.add_argument("--model-path", type=str, default="/models/Qwen2.5-7B-Instruct")
-    parser.add_argument("--tokenizer-path", type=str, default="/models/Qwen2.5-7B-Instruct")
-    parser.add_argument("--adapter-path", type=str, default="/models/TokenSkip-Qwen2.5-7B-Instruct-GSM8K")
+    parser.add_argument("--output-dir", type=str, default="outputs/Qwen2.5-3B-Instruct/gsm8k/", help="default to `model_path`_predictions")
+    parser.add_argument("--model-path", type=str, default="your_model_path/Qwen2.5-3B-Instruct")
+    parser.add_argument("--tokenizer-path", type=str, default="your_model_path/Qwen2.5-3B-Instruct")
+    parser.add_argument("--adapter-path", type=str, default="your_model_path/TokenSkip-Qwen2.5-3B-Instruct-GSM8K")
     parser.add_argument("--model-size", type=str, choices=['3b', '7b', '8b', '13b', '14b', '33b', '34b', '70b'], default="7b")
     parser.add_argument("--model-type", type=str, choices=['llama3', 'qwen'], default="qwen")
     parser.add_argument("--use_adapter", action='store_true', default=False, help="whether to use LoRA")

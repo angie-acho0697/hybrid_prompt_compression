@@ -1,6 +1,6 @@
 BENCHMARK="gsm8k" # "gsm8k", "math"
 OUPTUT_DIR="outputs/Qwen2.5-7B-Instruct/${BENCHMARK}/"
-MODEL_PATH="/models/Qwen2.5-7B-Instruct"
+MODEL_PATH="your_model_path/Qwen2.5-7B-Instruct"
 MODEL_SIZE="7b"
 MODEL_TYPE="qwen" # "llama3", "qwen"
 DATA_TYPE="test" # "train", "test"
@@ -13,7 +13,7 @@ TEMPERATURE=0.0
 SEED=42
 
 # TokenSkip Settings
-ADAPTER_PATH="/models/TokenSkip-Qwen2.5-7B-Instruct-GSM8K"
+ADAPTER_PATH="your_model_path/TokenSkip-Qwen2.5-7B-Instruct-GSM8K"
 COMPRESSION_RATIO=0.5
 
 

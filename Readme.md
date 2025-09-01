@@ -294,12 +294,12 @@ unstate the comuntage the latest commmit
 Modify and run command lines in `eval.sh`, the results will be stored in `outputs/`.
 
 ```
-python ./evaluation.py --output-dir "outputs/Qwen2.5-7B-Instruct/gsm8k/" \
-    --model-path "/your_model_path/Qwen2.5-7B-Instruct" --tokenizer-path ${MODEL_PATH} \
-    --model-size "7b" --model-type "qwen" --data-type "test"  \
+python ./evaluation.py --output-dir "outputs/Qwen2.5-3B-Instruct/gsm8k/" \
+    --model-path "your_model_path/Qwen2.5-3B-Instruct" --tokenizer-path "your_model_path/Qwen2.5-3B-Instruct" \
+    --model-size "3b" --model-type "qwen" --data-type "test"  \
     --max_num_examples 100000000000000 --max_new_tokens 512 \
     --eval_batch_size 32 --temperature 0.0 --seed 42 --benchmark "gsm8k" \
-    --adapter-path "/your_model_path/TokenSkip-Qwen2.5-7B-Instruct-GSM8K" \
+    --adapter-path "your_model_path/TokenSkip-Qwen2.5-3B-Instruct-GSM8K" \
     --compression_ratio 0.5 --use_adapter
 ```
 
