@@ -96,12 +96,12 @@ def infer(args, test_data, answer_extraction_fn):
             # torch_dtype=torch.float16,
             torch_dtype=torch.float32,
             trust_remote_code=True,
-            # device_map="auto",
-            device_map="cpu"
+            device_map="auto",
+            # device_map="cpu"
         )
 
         if args.use_adapter:
-            model = PeftModel.from_pretrained(model, args.adapter_path, device_map="cpu") #auto
+            model = PeftModel.from_pretrained(model, args.adapter_path, device_map="auto") #cpu
             model = model.merge_and_unload()
 
         # set padding side to left for batch generation
