@@ -3,7 +3,7 @@ import json
 import argparse
 from tqdm import tqdm
 from llmlingua import PromptCompressor
-
+import llmlingua_ner
 
 def get_model_name(model_size):
     """
@@ -179,11 +179,14 @@ def get_average_compress_rate(data):
 
 def data_processing_gsm8k(model_name="Qwen2.5-7B-Instruct", model_size="7b", model_type="qwen", llmlingua_path="your_model_path/llmlingua-2-xlm-roberta-large-meetingbank"):
     """
-    The overall pipeline to process the GSM8K data.
+    The overall pipeline to process the GSM8K data with NER enhancement.
     """
     filter_correct_outputs(model_name=model_name, model_size=model_size)
     filter_formatted_outputs(model_name=model_name, model_size=model_size, model_type=model_type)
-    compress_cot_outputs(model_name=model_name, model_size=model_size, model_type=model_type, llmlingua_path=llmlingua_path)
+    # Replace this line:
+    # compress_cot_outputs(model_name=model_name, model_size=model_size, model_type=model_type, llmlingua_path=llmlingua_path)
+    # With this:
+    compress_cot_with_ner_enhancement(model_name=model_name, model_size=model_size, model_type=model_type, llmlingua_path=llmlingua_path)
 
 def main():
     parser = argparse.ArgumentParser(description="LLMLingua compression script for TokenSkip project")
