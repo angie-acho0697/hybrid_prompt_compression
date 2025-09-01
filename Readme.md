@@ -27,7 +27,8 @@ Output: Hard-compressed CoT reasoning maintaining logical flow and factual accur
 ### Stage 2: Soft Prompt Compression Methodology:
 Paper here: https://arxiv.org/pdf/2504.07109
 
-## Model Selection: Use frozen Qwen2.5-3B, Qwen2.5-7B-Instruct-Instruct and Gemma with trainable LoRA parameters for encoder consistency
+## Model Selection: 
+Use frozen Qwen2.5-3B, Qwen2.5-7B-Instruct-Instruct and Gemma with trainable LoRA parameters for encoder consistency
 
 
 ## Model Weights
@@ -166,7 +167,7 @@ Modify the command lines in `eval.sh` (e.g., set `DATA_TYPE` to `train`) and run
 
 ```
 python ./evaluation.py --output-dir "outputs/Qwen2.5-7B-Instruct/gsm8k/" \
-    --model-path "/your_model_path/Qwen2.5-7B-Instruct" --tokenizer-path ${MODEL_PATH} \
+    --model-path "your_model_path/Qwen2.5-7B-Instruct" --tokenizer-path "your_model_path/Qwen2.5-7B-Instruct" \
     --model-size "7b" --model-type "qwen" --data-type "train"  \
     --max_num_examples 100000000000000 --max_new_tokens 512 \
     --eval_batch_size 32 --temperature 0.0 --seed 42 --benchmark "gsm8k"
