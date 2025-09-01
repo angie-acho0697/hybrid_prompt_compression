@@ -391,16 +391,8 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
                 model_type=model_type
             )
             
-            # Create enhanced data entry with clear NER enhancement indicators
+            # Create simple compressed data entry matching the desired format
             compressed_data_line = {
-                'NER_ENHANCED_VERSION': 'NEW_ENHANCED_OUTPUT_v1.0',
-                'enhancement_type': 'NER_Enhanced_TokenSkip',
-                'generation_timestamp': datetime.now().isoformat(),
-                'enhancement_metadata': {
-                    'version': 'NEW_ENHANCED_OUTPUT_v1.0',
-                    'description': 'NER-Enhanced TokenSkip with Entity Preservation',
-                    'features': ['SpaCy NER', 'CoT Pattern Recognition', 'Logical Connector Preservation', 'Force Token Protection']
-                },
                 'question': data[i]['messages'][0]['content'],
                 'input': data[i]['prompt'],
                 'output': data[i]['model_output'],
@@ -411,16 +403,7 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
                 'compressed_cot': enhanced_result['compressed_prompt'],
                 'original_cot_tokens': enhanced_result['origin_tokens'],
                 'compressed_cot_tokens': enhanced_result['compressed_tokens'],
-                'compression_rate': enhanced_result['rate'],
-                'ner_entities': enhanced_result['ner_entities'],
-                'force_tokens_used': enhanced_result['force_tokens_used'],
-                'ner_preservation_rate': enhanced_result['ner_preservation_rate'],
-                'enhancement_features': {
-                    'spacy_entities_preserved': len(enhanced_result['ner_entities']['spacy_entities']),
-                    'cot_entities_preserved': len(enhanced_result['ner_entities']['cot_entities']),
-                    'logical_connectors_preserved': len(enhanced_result['ner_entities']['logical_connectors']),
-                    'force_tokens_count': len(enhanced_result['force_tokens_used'])
-                }
+                'compression_rate': enhanced_result['rate']
             }
             compressed_data.append(compressed_data_line)
         
@@ -430,16 +413,10 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
         # Print statistics
         avg_compression_rate = sum(item['compressed_cot_tokens'] / item['original_cot_tokens'] 
                                  for item in compressed_data) / len(compressed_data)
-        avg_preservation_rate = sum(item['ner_preservation_rate'] for item in compressed_data) / len(compressed_data)
         
-        print(f"✅ NER ENHANCED NEW OUTPUT Saved to: {output_path}")
+        print(f"✅ Compressed data saved to: {output_path}")
         print(f"📊 Average Compression Rate: {avg_compression_rate:.4f}")
-        print(f"🎯 Average NER Preservation Rate: {avg_preservation_rate:.4f}")
-        print(f"🔍 NER Enhancement Features Applied:")
-        print(f"   - SpaCy Entities: {len(compressed_data[0]['enhancement_features']['spacy_entities_preserved']) if compressed_data else 0}")
-        print(f"   - CoT Entities: {len(compressed_data[0]['enhancement_features']['cot_entities_preserved']) if compressed_data else 0}")
-        print(f"   - Logical Connectors: {len(compressed_data[0]['enhancement_features']['logical_connectors_preserved']) if compressed_data else 0}")
-        print(f"   - Force Tokens: {len(compressed_data[0]['enhancement_features']['force_tokens_count']) if compressed_data else 0}")
+        print(f"📝 Total samples processed: {len(compressed_data)}")
 
 
 def main():
