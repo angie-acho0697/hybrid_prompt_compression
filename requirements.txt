@@ -14,3 +14,4 @@ llamafactory
 spacy 
 numpy 
 regex
+spacy-model-en_core_web_sm

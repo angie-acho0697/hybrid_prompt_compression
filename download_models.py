@@ -6,6 +6,7 @@ This script downloads:
 1. Qwen2.5-7B-Instruct base model
 2. LLMLingua-2 model weights
 3. TokenSkip LoRA adapters for different model sizes
+4. spaCy English model (en_core_web_sm)
 """
 
 import os
@@ -28,6 +29,20 @@ def run_command(command, description):
     except subprocess.CalledProcessError as e:
         print(f"❌ {description} failed with error:")
         print(f"Error: {e.stderr}")
+        return False
+
+def install_spacy_model():
+    """Download and install spaCy English model."""
+    print(f"\n🔄 Downloading spaCy English model (en_core_web_sm)...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+        print("✅ spaCy English model downloaded successfully")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Failed to download spaCy model: {e}")
+        return False
+    except Exception as e:
+        print(f"❌ Unexpected error downloading spaCy model: {e}")
         return False
 
 def download_model_from_hf(model_id, local_dir, description):
@@ -72,6 +87,10 @@ def main():
                        help="Download only LLMLingua-2 model")
     parser.add_argument("--adapters-only", action="store_true", 
                        help="Download only TokenSkip adapters")
+    parser.add_argument("--spacy-only", action="store_true",
+                       help="Download only spaCy English model")
+    parser.add_argument("--skip-spacy", action="store_true",
+                       help="Skip downloading spaCy English model")
     parser.add_argument("--model-size", type=str, default="7b",
                        help="Qwen model size to download (e.g., 1.5b, 3b, 4b, 6b, 7b, 8b, 9b, 12b, 14b, 32b, etc.)")
     parser.add_argument("--skip-disk-check", action="store_true",
@@ -90,7 +109,7 @@ def main():
     
     # Inform about adapter availability
     available_adapters = ["3b", "7b", "14b"]
-    if args.model_size.lower() not in available_adapters and not args.qwen_only and not args.llmlingua_only:
+    if args.model_size.lower() not in available_adapters and not args.qwen_only and not args.llmlingua_only and not args.spacy_only:
         print(f"ℹ️  Note: TokenSkip adapters are only available for {', '.join(available_adapters)} models.")
         print(f"   For {args.model_size} models, you'll need to train your own adapter.")
     
@@ -100,6 +119,23 @@ def main():
     
     success_count = 0
     total_count = 0
+    
+    # Download spaCy model first (unless explicitly skipped or downloading only other models)
+    if not args.skip_spacy and not (args.qwen_only or args.llmlingua_only or args.adapters_only) or args.spacy_only:
+        total_count += 1
+        if install_spacy_model():
+            success_count += 1
+    
+    # If only spacy model was requested, we're done
+    if args.spacy_only:
+        print("\n" + "=" * 50)
+        print("📊 Download Summary")
+        print(f"✅ Successfully downloaded: {success_count}/{total_count} models")
+        if success_count == total_count:
+            print("🎉 spaCy model downloaded successfully!")
+        else:
+            print("⚠️  spaCy model download failed.")
+        return
     
     # 1. Download Qwen base model
     if not args.llmlingua_only and not args.adapters_only:

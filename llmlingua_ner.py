@@ -8,6 +8,7 @@ from transformers import AutoTokenizer, RobertaTokenizer, RobertaForTokenClassif
 import torch
 from llmlingua import PromptCompressor
 import numpy as np
+from datetime import datetime
 
 class NEREnhancedTokenSkip:
     """
@@ -373,7 +374,7 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
     
     for compression_ratio in ratio_list:
         print(f"\n🔄 Processing compression ratio: {compression_ratio}")
-        output_path = os.path.join(output_dir, f"train_outputs_ner_enhanced_compressed_ratio_{compression_ratio}.jsonl")
+        output_path = os.path.join(output_dir, f"NER_ENHANCED_NEW_OUTPUT_compressed_ratio_{compression_ratio}.jsonl")
         
         compressed_data = []
         
@@ -390,8 +391,16 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
                 model_type=model_type
             )
             
-            # Create enhanced data entry
+            # Create enhanced data entry with clear NER enhancement indicators
             compressed_data_line = {
+                'NER_ENHANCED_VERSION': 'NEW_ENHANCED_OUTPUT_v1.0',
+                'enhancement_type': 'NER_Enhanced_TokenSkip',
+                'generation_timestamp': datetime.now().isoformat(),
+                'enhancement_metadata': {
+                    'version': 'NEW_ENHANCED_OUTPUT_v1.0',
+                    'description': 'NER-Enhanced TokenSkip with Entity Preservation',
+                    'features': ['SpaCy NER', 'CoT Pattern Recognition', 'Logical Connector Preservation', 'Force Token Protection']
+                },
                 'question': data[i]['messages'][0]['content'],
                 'input': data[i]['prompt'],
                 'output': data[i]['model_output'],
@@ -405,7 +414,13 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
                 'compression_rate': enhanced_result['rate'],
                 'ner_entities': enhanced_result['ner_entities'],
                 'force_tokens_used': enhanced_result['force_tokens_used'],
-                'ner_preservation_rate': enhanced_result['ner_preservation_rate']
+                'ner_preservation_rate': enhanced_result['ner_preservation_rate'],
+                'enhancement_features': {
+                    'spacy_entities_preserved': len(enhanced_result['ner_entities']['spacy_entities']),
+                    'cot_entities_preserved': len(enhanced_result['ner_entities']['cot_entities']),
+                    'logical_connectors_preserved': len(enhanced_result['ner_entities']['logical_connectors']),
+                    'force_tokens_count': len(enhanced_result['force_tokens_used'])
+                }
             }
             compressed_data.append(compressed_data_line)
         
@@ -417,9 +432,14 @@ def compress_cot_with_ner_enhancement(model_name="Qwen2.5-7B-Instruct", model_si
                                  for item in compressed_data) / len(compressed_data)
         avg_preservation_rate = sum(item['ner_preservation_rate'] for item in compressed_data) / len(compressed_data)
         
-        print(f"✅ Saved to: {output_path}")
+        print(f"✅ NER ENHANCED NEW OUTPUT Saved to: {output_path}")
         print(f"📊 Average Compression Rate: {avg_compression_rate:.4f}")
         print(f"🎯 Average NER Preservation Rate: {avg_preservation_rate:.4f}")
+        print(f"🔍 NER Enhancement Features Applied:")
+        print(f"   - SpaCy Entities: {len(compressed_data[0]['enhancement_features']['spacy_entities_preserved']) if compressed_data else 0}")
+        print(f"   - CoT Entities: {len(compressed_data[0]['enhancement_features']['cot_entities_preserved']) if compressed_data else 0}")
+        print(f"   - Logical Connectors: {len(compressed_data[0]['enhancement_features']['logical_connectors_preserved']) if compressed_data else 0}")
+        print(f"   - Force Tokens: {len(compressed_data[0]['enhancement_features']['force_tokens_count']) if compressed_data else 0}")
 
 
 def main():
@@ -440,14 +460,17 @@ def main():
     # Get model name based on size
     model_name = f"Qwen2.5-{args.model_size.upper()}-Instruct"
     
-    print("🚀 NER-Enhanced TokenSkip Compression Pipeline")
-    print("=" * 60)
+    print("🚀 NER-Enhanced TokenSkip Compression Pipeline - NEW ENHANCED OUTPUT")
+    print("=" * 80)
+    print(f"🆕 VERSION: NEW_ENHANCED_OUTPUT_v1.0")
+    print(f"🔧 ENHANCEMENT: NER-Enhanced TokenSkip with Entity Preservation")
     print(f"Model: {model_name}")
     print(f"Model size: {args.model_size}")
     print(f"Model type: {args.model_type}")
     print(f"LLMLingua path: {args.llmlingua_path}")
     print(f"Input path: {args.input_path or 'Auto-detected'}")
     print(f"Output dir: {args.output_dir or 'Auto-generated'}")
+    print("=" * 80)
     
     # Run the NER-enhanced compression pipeline
     compress_cot_with_ner_enhancement(
